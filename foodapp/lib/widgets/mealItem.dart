@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:foodapp/screens/mealDetailScreen.dart';
 import '../models/meal.dart';
 
 class MealItem extends StatelessWidget {
+  final String id;
   final String title;
   final String imgURl;
   final int duration;
   final Complexity complexity;
+  final Affordability affordability;
   const MealItem({
+    @required this.id,
     @required this.title,
     @required this.imgURl,
     @required this.duration,
     @required this.complexity,
+    @required this.affordability,
   });
   String get ComplexityText {
     switch (complexity) {
@@ -26,23 +31,31 @@ class MealItem extends StatelessWidget {
   }
 
   String get AffordibilityText {
-    switch (complexity) {
-      case Complexity.Simple:
-        return 'Simple';
-      case Complexity.Hard:
-        return 'Hard';
-      case Complexity.Challenging:
-        return 'Challenging';
+    switch (affordability) {
+      case Affordability.Affordable:
+        return 'Affordable';
+      case Affordability.Luxurious:
+        return 'Luxurious';
+      case Affordability.Pricey:
+        return 'Pricey';
       default:
         return ' ';
     }
   }
 
-  void selectMeal() {}
+  void selectMeal(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      MealDetailScreen.routeName,
+      arguments: id,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: selectMeal,
+      onTap: () {
+        selectMeal(context);
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
@@ -113,6 +126,17 @@ class MealItem extends StatelessWidget {
                         width: 6,
                       ),
                       Text(ComplexityText),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.attach_money,
+                      ),
+                      SizedBox(
+                        width: 6,
+                      ),
+                      Text(AffordibilityText),
                     ],
                   ),
                 ],
